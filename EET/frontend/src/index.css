@@ -1,0 +1,12 @@
+@import "tailwindcss";
+.perspective {
+  perspective: 2500px;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+}
+
+.rotate-y-back {
+  transform: rotateY(180deg);
+}
