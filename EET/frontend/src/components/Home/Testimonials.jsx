@@ -266,7 +266,7 @@ const Testimonials = () => {
           </button>
           <div
             ref={cardsContainerRef}
-            className="flex gap-8"
+            className="flex gap-8 cursor-pointer"
           >
             {duplicatedTestimonials.map((testimonial, idx) => (
               <div

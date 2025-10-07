@@ -16,11 +16,13 @@ const Home = () => {
     <div>
       {/* Include Header */}
       <Header/>
-<Services />
+
 <WhoWeAre/>
 <ServicesSection/>
 <AboutUs/>
+
 <WhyEagleEyeTech/>
+<Services />
 <OurWork/>
 <Testimonials/>
 <ClientsSection/>

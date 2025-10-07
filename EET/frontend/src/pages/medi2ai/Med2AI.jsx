@@ -127,7 +127,7 @@ const Medi2AI = () => {
 
       {/* Features */}
       <section ref={featuresSectionRef} className="max-w-6xl mx-auto mb-16 flex flex-col md:flex-row items-center gap-8">
-        <img src="/ai2.jpg" 
+        <img src="/2ai1.png" 
              alt="AI Features" 
              className="md:w-1/2 w-full h-100 object-cover rounded-xl shadow-lg" />
         <div className="md:w-1/2 p-6 bg-white rounded-xl shadow-lg">
@@ -177,7 +177,7 @@ const Medi2AI = () => {
 {/* Key Highlights Section */}
 <section ref={highlightsSectionRef} className="max-w-6xl mx-auto mb-16 flex flex-col md:flex-row items-center gap-8">
   <img 
-    src="/ai3.png" 
+    src="/2ai2.jpeg" 
     alt="Highlights" 
     className="md:w-1/2 w-full h-100 object-cover rounded-xl shadow-lg" 
   />
@@ -226,7 +226,7 @@ const Medi2AI = () => {
     {/* Image Section */}
     <div className="lg:w-2/5">
       <img 
-        src="/ai4.jpg" 
+        src="/2ai3.webp" 
         alt="Healthcare professionals using Medi2AI" 
         className="w-full h-full object-cover rounded-xl shadow-lg min-h-[400px]" 
       />
@@ -286,7 +286,7 @@ const Medi2AI = () => {
 
       {/* Vision Section */}
       <section ref={visionSectionRef} className="max-w-5xl mx-auto mb-16 flex flex-col md:flex-row items-center">
-        <img src="/ai5.jpg" alt="Vision" className="md:w-1/2 w-full h-100 object-cover rounded-lg shadow-md mr-8" />
+        <img src="/2ai4.png" alt="Vision" className="md:w-1/2 w-full h-100 object-cover rounded-lg shadow-md mr-8" />
         <div className="md:w-1/2 p-6 bg-white rounded-lg shadow-md">
           <h2 className="text-3xl md:text-4xl font-bold text-custom-orange-700 mb-6">Beyond Today: The Vision Of Medi2AI</h2>
           <p className="text-gray-800 mb-6">
@@ -316,7 +316,7 @@ const Medi2AI = () => {
       <div className="max-w-5xl mx-auto border-t border-custom-orange-200 my-12"></div>
 {/* Why Different Section */}
 <section ref={differentSectionRef} className="max-w-5xl mx-auto mb-16 flex flex-col md:flex-row items-center">
-  <img src="/ai6.jpg" alt="Different" className="md:w-1/2 w-full h-100 object-cover rounded-lg shadow-md mr-8" />
+  <img src="/2ai5.jpg" alt="Different" className="md:w-1/2 w-full h-100 object-cover rounded-lg shadow-md mr-8" />
   <div className="md:w-1/2 p-6 bg-white rounded-lg shadow-md">
     <h2 className="text-3xl md:text-4xl font-bold text-custom-orange-700 mb-6">Why Medi2AI Is Different</h2>
     <p className="text-gray-800 mb-6">
@@ -359,7 +359,7 @@ const Medi2AI = () => {
 
      {/* Why Choose Section */}
 <section ref={chooseSectionRef} className="max-w-5xl mx-auto mb-16 flex flex-col md:flex-row items-center">
-  <img src="https://images.unsplash.com/photo-1556157382-97eda2d62296?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Choose" className="md:w-1/2 w-full h-72 object-cover rounded-lg shadow-md mr-8" />
+  <img src="/2ai6.png" alt="Choose" className="md:w-1/2 w-full h-72 object-cover rounded-lg shadow-md mr-8" />
   <div className="md:w-1/2 p-6 bg-white rounded-lg shadow-md">
     <h2 className="text-3xl md:text-4xl font-bold text-custom-orange-700 mb-6">Why Choose Medi2AI?</h2>
     
