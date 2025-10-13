@@ -496,8 +496,6 @@
 // };
 
 // export default JobCreate;
-
-
 import React, { useState, useRef, useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import JoditEditor from "jodit-react";
@@ -565,18 +563,27 @@ const JobCreate = () => {
     try {
       let response;
       if (id) {
-        // Edit
-        response = await axios.put(`http://localhost:5000/api/jobs/${id}`, formData);
+        // Edit: Whitelist only editable fields (ignores _id, createdAt, updatedAt, __v, etc.)
+        const updateData = {
+          title: formData.title,
+          role: formData.role,
+          location: formData.location,
+          description: formData.description,
+          type: formData.type,
+        };
+        response = await axios.put(`http://localhost:5000/api/jobs/${id}`, updateData);
         alert("Job updated successfully!");
       } else {
-        // Create
+        // Create: Send full formData (no extras)
         response = await axios.post("http://localhost:5000/api/jobs", formData);
         alert("Job post created successfully!");
       }
       navigate("/admin", { state: { refetch: true } }); // Trigger refetch in dashboard
     } catch (error) {
       console.error("Failed to save job:", error);
-      setError("Failed to save job: " + (error.response?.data?.error || "Server error"));
+      // Enhanced logging: Check for detailed backend message
+      const backendError = error.response?.data?.message || error.response?.data?.error || "Server error";
+      setError(`Failed to save job: ${backendError}`);
     } finally {
       setSubmitting(false);
     }
@@ -586,10 +593,10 @@ const JobCreate = () => {
     navigate("/admin");
   };
 
-  // Jodit Editor config
+  // Jodit Editor config - Responsive height
   const config = {
     readonly: false,
-    height: 250,
+    height: window.innerWidth < 768 ? 200 : 250, // Smaller on mobile
     toolbarSticky: true,
     showCharsCounter: false,
     showWordsCounter: false,
@@ -638,33 +645,34 @@ const JobCreate = () => {
   const highlightColor = "#F54A00";
 
   if (loading) {
-    return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+    return <div className="min-h-screen flex items-center justify-center px-4">Loading...</div>;
   }
 
   return (
-    <div className="min-h-screen bg-white px-6 md:px-20 py-16 mt-9">
-      <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-8">
-        {/* Main Form */}
-        <div className="md:col-span-2">
-          <h3 className="text-sm font-semibold uppercase tracking-widest mb-2" style={{ color: highlightColor }}>
+    <div className="min-h-screen bg-white px-4 sm:px-6 md:px-20 py-8 sm:py-12 md:py-16 mt-13">
+      <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
+        {/* Main Form - Full width on mobile, 2/3 on md+ */}
+        <div className="md:col-span-2 w-full">
+          {/* Responsive Headings */}
+          <h3 className="text-xs sm:text-sm font-semibold uppercase tracking-widest mb-2" style={{ color: highlightColor }}>
             # {id ? "Edit Job Posting" : "New Job Posting"}
           </h3>
-          <h1 className="text-3xl md:text-5xl font-bold leading-tight mb-4">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold leading-tight mb-3 sm:mb-4">
             {id ? "Update" : "Post a New"}{" "}
             <span className="relative inline-block bg-no-repeat" style={{ color: highlightColor }}>
               Job Opportunity
             </span>
           </h1>
-          <p className="text-gray-600 mb-12">
+          <p className="text-gray-600 mb-6 sm:mb-8 md:mb-12 text-sm sm:text-base">
             {id ? "Update the job details below." : "Add a new position to attract top talent at Eagle Eye Tech. Fill in the details below to get started."}
           </p>
           
-          {error && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">{error}</div>}
+          {error && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4 text-sm">{error}</div>}
           
-          <form onSubmit={handleSubmit} className="bg-white border border-gray-200 rounded-xl shadow-lg p-8 space-y-6">
+          <form onSubmit={handleSubmit} className="bg-white border border-gray-200 rounded-xl shadow-lg p-4 sm:p-6 md:p-8 space-y-4 sm:space-y-6">
             {/* Title */}
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2" htmlFor="title">
+              <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-2" htmlFor="title">
                 Job Title
               </label>
               <input
@@ -673,7 +681,7 @@ const JobCreate = () => {
                 name="title"
                 value={formData.title}
                 onChange={handleInputChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm sm:text-base"
                 placeholder="e.g., DATA ENGINEER (Multiple Openings)"
                 required
               />
@@ -681,7 +689,7 @@ const JobCreate = () => {
 
             {/* Role */}
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2" htmlFor="role">
+              <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-2" htmlFor="role">
                 Role (Category)
               </label>
               <input
@@ -690,7 +698,7 @@ const JobCreate = () => {
                 name="role"
                 value={formData.role}
                 onChange={handleInputChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm sm:text-base"
                 placeholder="e.g., Engineer"
                 required
               />
@@ -698,7 +706,7 @@ const JobCreate = () => {
 
             {/* Location */}
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2" htmlFor="location">
+              <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-2" htmlFor="location">
                 Location
               </label>
               <input
@@ -707,7 +715,7 @@ const JobCreate = () => {
                 name="location"
                 value={formData.location}
                 onChange={handleInputChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm sm:text-base"
                 placeholder="e.g., USA"
                 required
               />
@@ -715,7 +723,7 @@ const JobCreate = () => {
 
             {/* Description */}
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
+              <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-2">
                 Description
               </label>
               <JoditEditor
@@ -730,7 +738,7 @@ const JobCreate = () => {
 
             {/* Job Type */}
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2" htmlFor="type">
+              <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-2" htmlFor="type">
                 Job Type
               </label>
               <select
@@ -738,7 +746,7 @@ const JobCreate = () => {
                 name="type"
                 value={formData.type}
                 onChange={handleInputChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm sm:text-base"
                 required
               >
                 <option value="Full Time">Full Time</option>
@@ -748,19 +756,19 @@ const JobCreate = () => {
               </select>
             </div>
 
-            {/* Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 pt-4">
+            {/* Buttons - Stack on mobile */}
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-3 sm:pt-4">
               <button
                 type="button"
                 onClick={handleCancel}
-                className="flex-1 text-center py-3 px-6 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors duration-300 font-semibold text-gray-700"
+                className="flex-1 text-center py-2 sm:py-3 px-4 sm:px-6 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors duration-300 font-semibold text-gray-700 text-sm sm:text-base"
               >
                 Cancel
               </button>
               <button
                 type="submit"
                 disabled={submitting}
-                className="flex-1 text-white font-semibold py-3 px-6 rounded-md transition-all duration-300 transform hover:-translate-y-1 text-center block disabled:opacity-50"
+                className="flex-1 text-white font-semibold py-2 sm:py-3 px-4 sm:px-6 rounded-md transition-all duration-300 transform hover:-translate-y-1 text-center block disabled:opacity-50 text-sm sm:text-base"
                 style={{
                   backgroundColor: highlightColor,
                 }}
@@ -771,18 +779,18 @@ const JobCreate = () => {
           </form>
         </div>
 
-        {/* Recent Jobs Sidebar */}
-        <div className="md:col-span-1">
-          <h3 className="text-lg font-bold mb-4" style={{ color: highlightColor }}>
+        {/* Recent Jobs Sidebar - Full width on mobile, 1/3 on md+ */}
+        <div className="md:col-span-1 w-full mt-6 md:mt-0">
+          <h3 className="text-base sm:text-lg font-bold mb-3 sm:mb-4" style={{ color: highlightColor }}>
             Recent Jobs
           </h3>
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             {recentJobs.map((job) => (
-              <div key={job._id} className="bg-gray-50 p-4 rounded-lg border-l-4" style={{ borderLeftColor: highlightColor }}>
-                <h4 className="font-semibold text-sm mb-1">{job.title}</h4>
-                <p className="text-xs text-gray-600 mb-1">{job.role} - {job.location}</p>
-                <p className="text-xs text-gray-500">{job.type}</p>
-                <div className="flex gap-2 mt-2">
+              <div key={job._id} className="bg-gray-50 p-3 sm:p-4 rounded-lg border-l-4" style={{ borderLeftColor: highlightColor }}>
+                <h4 className="font-semibold text-xs sm:text-sm mb-1 line-clamp-1">{job.title}</h4>
+                <p className="text-xs text-gray-600 mb-1 line-clamp-1">{job.role} - {job.location}</p>
+                <p className="text-xs text-gray-500 line-clamp-1">{job.type}</p>
+                <div className="flex gap-2 mt-2 flex-wrap">
                   <Link
                     to={`/admin/job-edit/${job._id}`}
                     className="text-xs text-blue-600 hover:underline"

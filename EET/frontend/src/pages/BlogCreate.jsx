@@ -1349,10 +1349,10 @@ const BlogCreate = () => {
     navigate("/admin");
   };
 
-  // Jodit Editor config
+  // Jodit Editor config - Responsive height adjustment
   const config = {
     readonly: false,
-    height: 300,
+    height: window.innerWidth < 768 ? 250 : 300, // Smaller on mobile
     toolbarSticky: true,
     showCharsCounter: false,
     showWordsCounter: false,
@@ -1374,7 +1374,7 @@ const BlogCreate = () => {
 
   if (loading) {
     return (
-      <div className="overflow-x-hidden min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100">
+      <div className="overflow-x-hidden min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 px-4">
         <div className="text-center">Loading...</div>
       </div>
     );
@@ -1388,53 +1388,54 @@ const BlogCreate = () => {
 
   return (
     <div className="overflow-x-hidden min-h-screen mt-10">
-      <div className="py-16 px-6 bg-gradient-to-br from-gray-50 to-gray-100">
+      <div className="py-8 sm:py-12 md:py-16 px-4 sm:px-6 bg-gradient-to-br from-gray-50 to-gray-100">
         <div className="max-w-6xl mx-auto">
           {error && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4 text-center">{error}</div>}
           
-          {/* Form View */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {/* Left Side: Preview (for edit) */}
-            <div className="lg:col-span-1">
+          {/* Form View - Responsive Grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 lg:gap-8">
+            {/* Left Side: Preview (for edit) - Full-width on mobile, compact on small screens */}
+            <div className="lg:col-span-1 order-2 lg:order-1">
               {id ? (
-                <div className="bg-white rounded-2xl shadow-lg p-6 h-full flex flex-col min-h-0"> {/* min-h-0 for flex */}
-                  <h3 className="text-xl font-bold mb-4" style={{ color: orangeColor }}>
+                <div className="bg-white rounded-2xl shadow-lg p-4 sm:p-6 h-full flex flex-col min-h-0">
+                  <h3 className="text-lg sm:text-xl font-bold mb-3 sm:mb-4" style={{ color: orangeColor }}>
                     Edit Preview
                   </h3>
-                  <div className="flex-shrink-0 mb-4">
+                  <div className="flex-shrink-0 mb-3 sm:mb-4">
                     <img
                       src={imagePreview || formData.imageUrl}
                       alt={formData.title}
-                      className="w-full h-48 object-cover rounded-lg"
+                      className="w-full h-32 sm:h-40 md:h-48 object-cover rounded-lg"
                     />
                   </div>
-                  <h4 className="text-lg font-semibold mb-2">{formData.title}</h4>
-                  {/* Full Text Preview - Taller Height (More visible content, scroll if needed) */}
-                  <div className="text-sm text-gray-600 mb-4 overflow-auto max-h-[500px] flex-grow p-2 border rounded"> {/* max-h-500px for taller view */}
+                  <h4 className="text-base sm:text-lg font-semibold mb-2 truncate">{formData.title}</h4>
+                  {/* Full Text Preview - Responsive height: Smaller on mobile, scrollable */}
+                  <div className="text-xs sm:text-sm text-gray-600 mb-3 sm:mb-4 overflow-auto max-h-32 sm:max-h-[400px] md:max-h-[500px] flex-grow p-2 border rounded">
                     {getPreviewText()}
                   </div>
                 </div>
               ) : (
-                <div className="bg-gray-100 rounded-2xl p-6 h-full flex items-center justify-center">
-                  <p className="text-gray-500 text-center">Create new post</p>
+                <div className="bg-gray-100 rounded-2xl p-4 sm:p-6 h-full flex items-center justify-center">
+                  <p className="text-gray-500 text-center text-sm sm:text-base">Create new post</p>
                 </div>
               )}
             </div>
 
-            {/* Right Side: Form */}
-            <div className="lg:col-span-1">
-              <div className="max-w-2xl mx-auto">
-                <h2 className="text-4xl font-bold text-center mt-12 mb-4" style={{ color: orangeColor }}>
+            {/* Right Side: Form - Order first on mobile for better UX */}
+            <div className="lg:col-span-1 order-1 lg:order-2">
+              <div className="max-w-2xl mx-auto w-full">
+                {/* Responsive Title */}
+                <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center mt-4 sm:mt-8 mb-3 sm:mb-4" style={{ color: orangeColor }}>
                   {id ? "Edit Blog Post" : "Create New Blog Post"}
                 </h2>
-                <p className="text-gray-600 text-center max-w-md mx-auto mb-12">
+                <p className="text-gray-600 text-center max-w-md mx-auto mb-6 sm:mb-8 sm:mb-12 text-sm sm:text-base">
                   {id ? "Update your insights on AI, technology, and more" : "Share your insights on AI, technology, and more"}
                 </p>
                 
-                <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-lg p-8 space-y-6">
-                  {/* Title */}
+                <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-lg p-4 sm:p-6 md:p-8 space-y-4 sm:space-y-6">
+                  {/* Title - Full width, responsive padding */}
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2" htmlFor="title">
+                    <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-2" htmlFor="title">
                       Title *
                     </label>
                     <input
@@ -1443,7 +1444,7 @@ const BlogCreate = () => {
                       name="title"
                       value={formData.title}
                       onChange={handleInputChange}
-                      className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent ${
+                      className={`w-full px-3 sm:px-4 py-2 sm:py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm sm:text-base ${
                         validationErrorsMemo.title ? 'border-red-500' : 'border-gray-300'
                       }`}
                       placeholder="Enter blog title"
@@ -1454,7 +1455,7 @@ const BlogCreate = () => {
 
                   {/* Subtitle */}
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2" htmlFor="subtitle">
+                    <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-2" htmlFor="subtitle">
                       Subtitle *
                     </label>
                     <input
@@ -1463,7 +1464,7 @@ const BlogCreate = () => {
                       name="subtitle"
                       value={formData.subtitle}
                       onChange={handleInputChange}
-                      className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent ${
+                      className={`w-full px-3 sm:px-4 py-2 sm:py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm sm:text-base ${
                         validationErrorsMemo.subtitle ? 'border-red-500' : 'border-gray-300'
                       }`}
                       placeholder="Enter subtitle"
@@ -1472,9 +1473,9 @@ const BlogCreate = () => {
                     {validationErrorsMemo.subtitle && <p className="text-red-500 text-xs mt-1">{validationErrorsMemo.subtitle}</p>}
                   </div>
 
-                  {/* Image Upload */}
+                  {/* Image Upload - Responsive button & preview */}
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2" htmlFor="image">
+                    <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-2" htmlFor="image">
                       Featured Image (Optional)
                     </label>
                     <div className="relative">
@@ -1489,29 +1490,29 @@ const BlogCreate = () => {
                       <button
                         type="button"
                         onClick={() => fileInputRef.current?.click()}
-                        className="w-full flex items-center justify-center py-3 px-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-orange-500 transition-colors duration-300 text-gray-600 hover:text-orange-600 font-medium"
+                        className="w-full flex items-center justify-center py-2 sm:py-3 px-3 sm:px-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-orange-500 transition-colors duration-300 text-gray-600 hover:text-orange-600 font-medium text-sm sm:text-base"
                         disabled={submitting}
                       >
-                        <svg className="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg className="w-5 h-5 sm:w-6 sm:h-6 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                         </svg>
                         {imagePreview ? "Change Image" : "Upload Image"}
                       </button>
                     </div>
                     {imagePreview && (
-                      <div className="mt-4">
+                      <div className="mt-3 sm:mt-4">
                         <img
                           src={imagePreview}
                           alt="Preview"
-                          className="w-full h-48 object-cover rounded-lg shadow-md"
+                          className="w-full h-32 sm:h-40 md:h-48 object-cover rounded-lg shadow-md"
                         />
                       </div>
                     )}
                   </div>
 
-                  {/* Category */}
+                  {/* Category - Full width select */}
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2" htmlFor="category">
+                    <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-2" htmlFor="category">
                       Category *
                     </label>
                     <select
@@ -1519,7 +1520,7 @@ const BlogCreate = () => {
                       name="category"
                       value={formData.category}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                      className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm sm:text-base"
                       required
                     >
                       {categories.map((cat) => (
@@ -1530,7 +1531,7 @@ const BlogCreate = () => {
 
                   {/* Author */}
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2" htmlFor="author">
+                    <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-2" htmlFor="author">
                       Author *
                     </label>
                     <input
@@ -1539,7 +1540,7 @@ const BlogCreate = () => {
                       name="author"
                       value={formData.author}
                       onChange={handleInputChange}
-                      className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent ${
+                      className={`w-full px-3 sm:px-4 py-2 sm:py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm sm:text-base ${
                         validationErrorsMemo.author ? 'border-red-500' : 'border-gray-300'
                       }`}
                       placeholder="Enter author name"
@@ -1550,7 +1551,7 @@ const BlogCreate = () => {
 
                   {/* Location */}
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2" htmlFor="location">
+                    <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-2" htmlFor="location">
                       Location *
                     </label>
                     <input
@@ -1559,7 +1560,7 @@ const BlogCreate = () => {
                       name="location"
                       value={formData.location}
                       onChange={handleInputChange}
-                      className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent ${
+                      className={`w-full px-3 sm:px-4 py-2 sm:py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm sm:text-base ${
                         validationErrorsMemo.location ? 'border-red-500' : 'border-gray-300'
                       }`}
                       placeholder="Enter location (e.g., MERALA)"
@@ -1570,7 +1571,7 @@ const BlogCreate = () => {
 
                   {/* Date */}
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2" htmlFor="date">
+                    <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-2" htmlFor="date">
                       Date
                     </label>
                     <input
@@ -1579,14 +1580,14 @@ const BlogCreate = () => {
                       name="date"
                       value={formData.date}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent bg-gray-50"
+                      className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent bg-gray-50 text-sm sm:text-base"
                       placeholder="e.g., 13 Sept 2025"
                     />
                   </div>
 
-                  {/* Content */}
+                  {/* Content - Responsive editor height */}
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-2">
                       Content *
                     </label>
                     <JoditEditor
@@ -1601,19 +1602,19 @@ const BlogCreate = () => {
                     {validationErrorsMemo.text && <p className="text-red-500 text-xs mt-1">{validationErrorsMemo.text}</p>}
                   </div>
 
-                  {/* Buttons */}
-                  <div className="flex flex-col sm:flex-row gap-4 pt-4">
+                  {/* Buttons - Responsive stack */}
+                  <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-3 sm:pt-4">
                     <button
                       type="button"
                       onClick={handleCancel}
-                      className="flex-1 text-center py-3 px-6 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors duration-300 font-semibold text-gray-700"
+                      className="flex-1 text-center py-2 sm:py-3 px-4 sm:px-6 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors duration-300 font-semibold text-gray-700 text-sm sm:text-base"
                     >
                       Cancel
                     </button>
                     <button
                       type="submit"
                       disabled={submitting || !isFormValid}
-                      className="flex-1 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 transform hover:-translate-y-1 text-center block disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="flex-1 text-white font-semibold py-2 sm:py-3 px-4 sm:px-6 rounded-lg transition-all duration-300 transform hover:-translate-y-1 text-center block disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
                       style={{
                         background: `linear-gradient(to right, ${orangeColor}, ${orangeColor})`,
                       }}
